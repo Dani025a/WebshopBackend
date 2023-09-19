@@ -17,7 +17,7 @@ public partial class Product
 
     public string? Imageurl { get; set; }
 
-    public virtual Category? FkCategory { get; set; }
+    public virtual ICollection<ProductCategory> ProductCategory { get; set; } = new List<ProductCategory>();
 
     public virtual ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
 

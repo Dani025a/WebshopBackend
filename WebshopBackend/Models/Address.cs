@@ -17,5 +17,5 @@ public partial class Address
 
     public int? FkUserId { get; set; }
 
-    public virtual User? FkUser { get; set; }
+    public virtual User User { get; set; }
 }

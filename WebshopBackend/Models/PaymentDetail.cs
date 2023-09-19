@@ -13,5 +13,5 @@ public partial class PaymentDetail
 
     public int? FkPaymentId { get; set; }
 
-    public virtual Payment? FkPayment { get; set; }
+    public virtual Payment? Payment { get; set; }
 }

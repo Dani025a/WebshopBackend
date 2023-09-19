@@ -15,11 +15,11 @@ public partial class Order
 
     public int? FkUserId { get; set; }
 
-    public virtual OrderStatus? FkOrderStatusNavigation { get; set; }
+    public virtual OrderStatus? OrderStatusNavigation { get; set; }
 
-    public virtual Payment? FkPayment { get; set; }
+    public virtual Payment? Payment { get; set; }
 
-    public virtual User? FkUser { get; set; }
+    public virtual User? User { get; set; }
 
     public virtual ICollection<OrderLineItem> OrderLineItems { get; set; } = new List<OrderLineItem>();
 }

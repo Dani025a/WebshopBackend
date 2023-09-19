@@ -11,5 +11,5 @@ public partial class Inventory
 
     public int FkProductId { get; set; }
 
-    public virtual Product FkProduct { get; set; } = null!;
+    public virtual Product Product { get; set; } = null!;
 }
