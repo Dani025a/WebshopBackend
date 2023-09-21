@@ -7,11 +7,12 @@ namespace WebshopBackend.Interfaces
     {
         ICollection<Address> GetAddresses();
         Address GetAddress(int addressid);
-        Address GetAddressByUser(int userid);
         bool AddressExists(int addressid);
         bool CreateAddress(Address address);
         bool UpdateAddress(Address address);
         bool DeleteAddress(Address address);
         bool Save();
+        Address GetAddressByUser(int userid);
+
     }
 }

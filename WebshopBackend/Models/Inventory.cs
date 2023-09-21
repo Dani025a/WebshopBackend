@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebshopBackend.Models;
-
-public partial class Inventory
+[Table("inventory")]
+public class Inventory
 {
     [Required]
     [Column("stock")]
@@ -18,5 +18,5 @@ public partial class Inventory
     [Column("fk_product_id")]
     public int FkProductId { get; set; }
 
-    public virtual Product FkProduct { get; set; } = null!;
+    public Product FkProduct { get; set; } = null!;
 }
