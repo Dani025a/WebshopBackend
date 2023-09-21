@@ -21,9 +21,9 @@ public class Payment
     [Column("fk_user_id")]
     public int? FkUserId { get; set; }
     
-    public virtual User? FkUser { get; set; }
+    public User? FkUser { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 
-    public virtual ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
+    public ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
 }

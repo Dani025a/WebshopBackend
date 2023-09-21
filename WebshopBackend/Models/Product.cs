@@ -33,9 +33,9 @@ public class Product
     [MaxLength(255)]
     public string? Imageurl { get; set; }
 
-    public virtual Category? FkCategory { get; set; }
+    public Category? FkCategory { get; set; }
 
     public Inventory Inventory { get; set; }
 
-    public virtual ICollection<OrderLineItem> OrderLineItems { get; set; } = new List<OrderLineItem>();
+    public ICollection<OrderLineItem> OrderLineItems { get; set; } = new List<OrderLineItem>();
 }

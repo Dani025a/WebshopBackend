@@ -15,5 +15,5 @@ public partial class OrderStatus
     [Required]
     public Enum Name { get; set; }
     
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }
