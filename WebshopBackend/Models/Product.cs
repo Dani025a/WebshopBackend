@@ -1,25 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebshopBackend.Models;
 
-public partial class Product
+[Table("products")]
+public class Product
 {
-    public string? Name { get; set; }
-
-    public string? Description { get; set; }
-
-    public decimal? Price { get; set; }
-
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("product_id")]
     public int ProductId { get; set; }
+    
+    [Required]
+    [MaxLength(40)]
+    [Column("name")]
+    public string Name { get; set; }
+    
+    [Required]
+    [MaxLength(40)]
+    [Column("description")]
+    public string Description { get; set; }
 
-    public int? FkCategoryId { get; set; }
+    [Required]
+    [Column("price")]
+    public decimal Price { get; set; }
+    
+    [Required]
+    [Column("fk_category_id")]
+    public int FkCategoryId { get; set; }
 
-    public string? Imageurl { get; set; }
+    [MaxLength(255)]
+    public string Imageurl { get; set; }
 
-    public virtual Category? FkCategory { get; set; }
+    public Category FkCategory { get; set; }
 
-    public virtual ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
+    public Inventory Inventory { get; set; }
 
-    public virtual ICollection<OrderLineItem> OrderLineItems { get; set; } = new List<OrderLineItem>();
+    public ICollection<OrderLineItem> OrderLineItems { get; set; } = new List<OrderLineItem>();
 }

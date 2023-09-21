@@ -38,7 +38,7 @@ public partial class WebshopContext : DbContext
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
-
+        
         modelBuilder.Entity<Address>(entity =>
         {
 
@@ -88,23 +88,22 @@ public partial class WebshopContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-
-            entity.HasOne(d => d.FkUser).WithMany(p => p.Payments)
+            entity.HasOne(d => d.FkUser)
+                .WithMany(p => p.Payments)
                 .HasForeignKey(d => d.FkUserId)
                 .HasConstraintName("payments_ibfk_1");
         });
 
         modelBuilder.Entity<PaymentDetail>(entity =>
         {
-
-            entity.HasOne(d => d.FkPayment).WithMany(p => p.PaymentDetails)
-                .HasForeignKey(d => d.FkPaymentId)
+            entity.HasOne(d => d.FkPayment)
+                .WithOne()
+                .HasForeignKey<PaymentDetail>(d => d.FkPaymentId)
                 .HasConstraintName("payment_details_ibfk_1");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-
             entity.HasOne(d => d.FkCategory).WithMany(p => p.Products)
                 .HasForeignKey(d => d.FkCategoryId)
                 .HasConstraintName("products_ibfk_2");

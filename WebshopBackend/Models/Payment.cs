@@ -1,19 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebshopBackend.Models;
 
-public partial class Payment
+[Table("payments")]
+public class Payment
 {
-    public decimal? TotalPrice { get; set; }
-
-    public int? FkUserId { get; set; }
-
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("payment_id")]
     public int PaymentId { get; set; }
+    
+    [Required]
+    [Column("total_price")]
+    public decimal TotalPrice { get; set; }
 
-    public virtual User? FkUser { get; set; }
+    [Required]
+    [Column("fk_user_id")]
+    public int FkUserId { get; set; }
+    
+    public User FkUser { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 
-    public virtual ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
+    public ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
 }
