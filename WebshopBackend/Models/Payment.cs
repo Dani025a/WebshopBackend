@@ -15,13 +15,13 @@ public class Payment
     
     [Required]
     [Column("total_price")]
-    public decimal? TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
 
     [Required]
     [Column("fk_user_id")]
-    public int? FkUserId { get; set; }
+    public int FkUserId { get; set; }
     
-    public User? FkUser { get; set; }
+    public User FkUser { get; set; }
 
     public ICollection<Order> Orders { get; set; } = new List<Order>();
 

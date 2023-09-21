@@ -14,27 +14,27 @@ public class User
     [Required]
     [MaxLength(40)]
     [Column("first_name")]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; }
 
     [Required]
     [MaxLength(40)]
     [Column("last_name")]
-    public string? LastName { get; set; }
+    public string LastName { get; set; }
 
     [Required]
     [MaxLength(40)]
     [Column("password")]
-    public string? Password { get; set; }
+    public string Password { get; set; }
 
     [Required]
     [MaxLength(40)]
     [Column("email")]
-    public string? Email { get; set; }
+    public string Email { get; set; }
 
     [Required]
     [MaxLength(40)]
     [Column("phone_number")]
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
     public Address Address { get; set; }
     public ICollection<Order> Orders { get; set; } = new List<Order>();

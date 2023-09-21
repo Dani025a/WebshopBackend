@@ -15,17 +15,17 @@ public class PaymentDetail
     [Required]
     [MaxLength(150)]
     [Column("card_number")]
-    public string? CardNumber { get; set; }
+    public string CardNumber { get; set; }
 
     [Required]
     [MaxLength(150)]
     [Column("transaction_number")]
-    public string? TransactionNumber { get; set; }
+    public string TransactionNumber { get; set; }
     
     [Required]
     [Column("fk_payment_id")]
-    public int? FkPaymentId { get; set; }
+    public int FkPaymentId { get; set; }
 
-    public Payment? FkPayment { get; set; }
+    public Payment FkPayment { get; set; }
 
 }
