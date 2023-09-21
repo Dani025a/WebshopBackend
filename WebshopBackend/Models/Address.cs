@@ -1,21 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebshopBackend.Models;
 
-public partial class Address
+[Table("address")]
+public class Address
 {
-    public string? ZipCode { get; set; }
-
-    public string? StreetName { get; set; }
-
-    public short? StreetNumber { get; set; }
-
-    public string? City { get; set; }
-
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Column("address_id")]
     public int AddressId { get; set; }
+    [Required]
+    [MaxLength(40)]
+    [Column("street_name")]
+    public string StreetName { get; set; }
 
-    public int? FkUserId { get; set; }
+    [Required]
+    [MaxLength(40)]
+    [Column("street_number")]
+    public string StreetNumber { get; set; }
 
-    public virtual User? FkUser { get; set; }
+    [Required]
+    [MaxLength(40)]
+    [Column("zip_code")]
+    public string ZipCode { get; set; }
+
+    [Required]
+    [MaxLength(40)]
+    [Column("city")]
+    public string City { get; set; }
+
+    [Required]
+    [Column("fk_user_id")]
+    public int FkUserId { get; set; }
+
+    public User? FkUser { get; set; }
 }

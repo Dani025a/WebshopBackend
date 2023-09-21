@@ -9,6 +9,7 @@ namespace WebshopBackend.Helper
         public MappingProfiles()
         {
             CreateMap<User, UserDto>();
+            CreateMap<Address, AddressDto>();
         }
     }
 }
