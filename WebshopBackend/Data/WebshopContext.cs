@@ -42,8 +42,8 @@ public partial class WebshopContext : DbContext
         modelBuilder.Entity<Address>(entity =>
         {
 
-            entity.HasOne(d => d.FkUser).WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.FkUserId)
+            entity.HasOne(d => d.FkUser).WithOne(p => p.Address)
+                .HasForeignKey<Address>(d => d.FkUserId)
                 .HasConstraintName("address_ibfk_1");
         });
 

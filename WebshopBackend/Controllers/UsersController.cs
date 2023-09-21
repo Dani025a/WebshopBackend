@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WebshopBackend.Data;
+using WebshopBackend.Dto;
+using WebshopBackend.Interfaces;
 using WebshopBackend.Models;
 
 namespace WebshopBackend.Controllers
@@ -14,111 +12,133 @@ namespace WebshopBackend.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly WebshopContext _context;
+        private readonly IUserRepository _userRepository;
+        private readonly IAddressRepository _addressRepository;
+        private readonly IMapper _mapper;
 
-        public UsersController(WebshopContext context)
+        public UsersController(IUserRepository userRepository,
+            IAddressRepository addressRepository,
+            IMapper mapper)
         {
-            _context = context;
+            _userRepository = userRepository;
+            _addressRepository = addressRepository;
+            _mapper = mapper;
         }
 
-        // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
+        public IActionResult GetUsers()
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            return await _context.Users.ToListAsync();
+            var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers());
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(users);
         }
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        [HttpGet("{userid}")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
+        public IActionResult GetUser(int userid)
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
+            if (!_userRepository.UserExists(userid))
                 return NotFound();
-            }
 
-            return user;
+            var user = _mapper.Map<UserDto>(_userRepository.GetUser(userid));
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(user);
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
-        {
-            if (id != user.UserId)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateUser([FromQuery] int addressid, [FromBody] User userCreate)
         {
-          if (_context.Users == null)
-          {
-              return Problem("Entity set 'WebshopContext.Users'  is null.");
-          }
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            if (userCreate == null)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+            var users = _userRepository.GetUsers()
+                .Where(c => c.LastName.Trim().ToUpper() == userCreate.LastName.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (users != null)
+            {
+                ModelState.AddModelError("", "User already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userMap = _mapper.Map<User>(userCreate);
+
+            userMap.Address =  _addressRepository.GetAddress(addressid);
+
+            if (!_userRepository.CreateUser(userMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        [HttpPut("{userId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateUser(int userid, [FromBody] UserDto updatedUser)
         {
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (updatedUser == null)
+                return BadRequest(ModelState);
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            if (userid != updatedUser.UserId)
+                return BadRequest(ModelState);
+
+            if (!_userRepository.UserExists(userid))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var userMap = _mapper.Map<User>(updatedUser);
+
+            if (!_userRepository.UpdateUser(userMap))
+            {
+                ModelState.AddModelError("", "Something went wrong updating user");
+                return StatusCode(500, ModelState);
+            }
 
             return NoContent();
         }
 
-        private bool UserExists(int id)
+        [HttpDelete("{userId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteUser(int userId)
         {
-            return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+            if (!_userRepository.UserExists(userId))
+            {
+                return NotFound();
+            }
+
+            var userToDelete = _userRepository.GetUser(userId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_userRepository.DeleteUser(userToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting user");
+            }
+
+            return NoContent();
         }
     }
 }

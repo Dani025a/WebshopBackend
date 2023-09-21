@@ -1,7 +1,7 @@
 ﻿namespace WebshopBackend.Dto
 {
 
-    public partial class UserDto
+    public class UserDto
     {
         public int UserId { get; set; }
 

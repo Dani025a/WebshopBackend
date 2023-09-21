@@ -2,7 +2,7 @@
 using WebshopBackend.Interfaces;
 using WebshopBackend.Models;
 
-namespace WebshopBackend.Repositoy
+namespace WebshopBackend.Repositories
 {
     public class UserRepository : IUserRepository
     {
