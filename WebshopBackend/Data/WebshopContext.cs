@@ -51,8 +51,8 @@ public partial class WebshopContext : DbContext
 
         modelBuilder.Entity<Inventory>(entity =>
         {
-            entity.HasOne(d => d.FkProduct).WithMany(p => p.Inventories)
-                .HasForeignKey(d => d.FkProductId)
+            entity.HasOne(d => d.FkProduct).WithOne(p => p.Inventory)
+                .HasForeignKey<Inventory>(d => d.FkProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_inventory_prodcut");
         });
