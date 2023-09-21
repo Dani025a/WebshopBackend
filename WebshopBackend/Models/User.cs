@@ -13,12 +13,12 @@ public class User
     
     [Required]
     [MaxLength(40)]
-    [Column("first_name")]
+    [Column("firstName")]
     public string FirstName { get; set; }
 
     [Required]
     [MaxLength(40)]
-    [Column("last_name")]
+    [Column("lastName")]
     public string LastName { get; set; }
 
     [Required]
