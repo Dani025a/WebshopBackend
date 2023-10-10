@@ -104,7 +104,7 @@ public partial class WebshopContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasOne(d => d.FkCategory).WithMany(p => p.Products)
+            entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.FkCategoryId)
                 .HasConstraintName("products_ibfk_2");
         });

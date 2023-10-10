@@ -10,6 +10,8 @@ namespace WebshopBackend.Helper
         {
             CreateMap<User, UserDto>();
             CreateMap<Address, AddressDto>();
+            CreateMap<Category, CategoryDto>();
+            CreateMap<Product, ProductDto>();
         }
     }
 }

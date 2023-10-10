@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebshopBackend.Data;
 using WebshopBackend.Dto;
 using WebshopBackend.Interfaces;
 using WebshopBackend.Models;
@@ -15,20 +8,20 @@ using WebshopBackend.Repositories;
 
 namespace WebshopBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/address")]
     [ApiController]
-    public class AddressesController : ControllerBase
+    public class AddressController : ControllerBase
     {
         private readonly IAddressRepository _addressRepository;
         private readonly IMapper _mapper;
 
-        public AddressesController(IAddressRepository addressRepository, IMapper mapper)
+        public AddressController(IAddressRepository addressRepository, IMapper mapper)
         {
             _addressRepository = addressRepository;
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Address>))]
         public IActionResult GetAddresses()
         {
@@ -56,10 +49,10 @@ namespace WebshopBackend.Controllers
             return Ok(address);
         }
 
-        [HttpGet("/users/{userid}")]
+        [HttpGet("user/{userid}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(200, Type = typeof(Address))]
-        public IActionResult GetAddressOfAnOwner(int userid)
+        public IActionResult GetAddressOfAnUser(int userid)
         {
             var address = _mapper.Map<AddressDto>(
                 _addressRepository.GetAddressByUser(userid));
@@ -70,7 +63,7 @@ namespace WebshopBackend.Controllers
             return Ok(address);
         }
 
-        [HttpPost]
+        [HttpPost("")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         public IActionResult CreateAddress([FromBody] AddressDto addressCreate)

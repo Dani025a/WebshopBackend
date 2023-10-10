@@ -33,7 +33,7 @@ public class Product
     [MaxLength(255)]
     public string Imageurl { get; set; }
 
-    public Category FkCategory { get; set; }
+    public Category Category { get; set; }
 
     public Inventory Inventory { get; set; }
 

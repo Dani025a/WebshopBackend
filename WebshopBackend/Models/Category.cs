@@ -16,5 +16,5 @@ public class Category
     [Column("category_id")]
     public int CategoryId { get; set; }
 
-    public ICollection<Product> Products { get; set; } = new List<Product>();
+    public ICollection<Product> Products { get; set; }
 }
