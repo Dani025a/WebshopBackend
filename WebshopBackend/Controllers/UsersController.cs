@@ -6,7 +6,7 @@ using WebshopBackend.Models;
 
 namespace WebshopBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -61,7 +61,7 @@ namespace WebshopBackend.Controllers
                 return BadRequest(ModelState);
 
             var users = _userRepository.GetUsers()
-                .Where(c => c.LastName.Trim().ToUpper() == userCreate.LastName.TrimEnd().ToUpper())
+                .Where(c => c.Email.Trim().ToUpper() == userCreate.LastName.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
             if (users != null)
@@ -79,7 +79,7 @@ namespace WebshopBackend.Controllers
 
             if (!_userRepository.CreateUser(userMap))
             {
-                ModelState.AddModelError("", "Something went wrong while savin");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
